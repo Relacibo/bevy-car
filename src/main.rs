@@ -578,8 +578,8 @@ fn update_debug_ui(
     let mut right = 20.0;
     let mut front_left = 20.0;
     let mut front_right = 20.0;
-    let mut back_left = 20.0;
-    let mut back_right = 20.0;
+    let mut _back_left = 20.0;
+    let mut _back_right = 20.0;
 
     for child in children.iter() {
         if let Ok(sensor) = sensor_query.get(child) {
@@ -590,8 +590,8 @@ fn update_debug_ui(
                 DistanceSensorPosition::Right => right = sensor.last_distance,
                 DistanceSensorPosition::FrontLeft => front_left = sensor.last_distance,
                 DistanceSensorPosition::FrontRight => front_right = sensor.last_distance,
-                DistanceSensorPosition::BackLeft => back_left = sensor.last_distance,
-                DistanceSensorPosition::BackRight => back_right = sensor.last_distance,
+                DistanceSensorPosition::BackLeft => _back_left = sensor.last_distance,
+                DistanceSensorPosition::BackRight => _back_right = sensor.last_distance,
             }
         }
     }
@@ -802,8 +802,6 @@ fn update_sensors(
     rapier_context: ReadRapierContext,
 ) {
     let car_entity = *car_entity;
-    let car_pos = car_transform.translation;
-
     let Ok(ctx) = rapier_context.single() else {
         return;
     };
@@ -1005,7 +1003,6 @@ fn ai_parking_system(
     let car_state = parking_ai::CarState {
         position: car_transform.translation.to_array(),
         forward: car_transform.forward().to_array(),
-        right: car_transform.right().to_array(),
         speed: velocity.linvel.length(),
     };
 
