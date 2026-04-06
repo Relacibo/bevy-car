@@ -22,7 +22,6 @@ fn main() {
     )
     .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
     .add_plugins(RapierDebugRenderPlugin::default())
-    .insert_resource(DebugTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
     .add_systems(Startup, setup_scene)
     .add_systems(Startup, setup_debug_ui)
     .add_systems(Update, update_sensors)
@@ -41,10 +40,12 @@ fn main() {
         toggle_debug_ui.run_if(input_just_pressed(KeyCode::F3)),
     );
     #[cfg(debug_assertions)]
-    app.add_systems(Update, debug_sensors);
+    app.add_systems(Update, debug_sensors)
+        .insert_resource(DebugTimer(Timer::from_seconds(1.0, TimerMode::Repeating)));
     app.run();
 }
 
+#[cfg(debug_assertions)]
 #[derive(Resource)]
 struct DebugTimer(Timer);
 
@@ -863,6 +864,7 @@ fn update_sensors(
     }
 }
 
+#[cfg(debug_assertions)]
 fn debug_sensors(
     mut timer: ResMut<DebugTimer>,
     time: Res<Time>,

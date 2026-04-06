@@ -9,7 +9,9 @@ export PACKAGE_NAME=cargo metadata --no-deps --format-version 1 | jq -r '.packag
 echo "Building WASM target..."
 cargo build \
   --release \
-  --target wasm32-unknown-unknown
+  --target wasm32-unknown-unknown \
+  --no-default-features \
+  --features web
 
 echo "Running wasm-bindgen..."
 wasm-bindgen \

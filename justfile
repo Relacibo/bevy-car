@@ -44,24 +44,15 @@ release version="":
     echo "✅ Created release v$new_version"
     echo "Run 'just release-push' to push to remote"
 
-# Push release tag and changes to remote
+# Create release and push tag and changes to remote
 release-push version="":
+    just release {{version}}
     #!/usr/bin/env bash
     set -euo pipefail
     
-    # Determine version
-    if [ -z "{{version}}" ]; then
-        current=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
-        tag_version="v$current"
-    else
-        tag_version="v{{version}}"
-    fi
-    
-    # Check if tag exists
-    if ! git rev-parse "$tag_version" >/dev/null 2>&1; then
-        echo "❌ Tag $tag_version does not exist. Run 'just release' first."
-        exit 1
-    fi
+    # Get current version from Cargo.toml
+    current=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+    tag_version="v$current"
     
     # Get current branch
     current_branch=$(git rev-parse --abbrev-ref HEAD)
