@@ -1194,25 +1194,28 @@ fn ai_parking_system(
         }
     }
 
-    // SICHERHEITSPRÜFUNG: Nur bei extrem nahen Kollisionen eingreifen (< 0.6m)
-    if input.throttle > 0.0 && (front < 0.6 || front_left < 0.6 || front_right < 0.6) {
-        input.throttle = 0.0;
-        input.brake = true;
-        input.steering = 0.0;
-        info!(
-            "AI: EMERGENCY STOP - Imminent front collision! (front: {:.2}, fl: {:.2}, fr: {:.2})",
-            front, front_left, front_right
-        );
-    }
+    // SICHERHEITSPRÜFUNG: Nur stoppen wenn SCHNELL fahrend UND Kollision droht
+    let current_speed = velocity.linvel.length();
+    if current_speed > 1.0 {
+        if input.throttle > 0.0 && (front < 0.8 || front_left < 0.8 || front_right < 0.8) {
+            input.throttle = 0.0;
+            input.brake = true;
+            input.steering = 0.0;
+            info!(
+                "AI: EMERGENCY BRAKE - Moving forward into obstacle! (speed: {:.2}, front: {:.2}, fl: {:.2}, fr: {:.2})",
+                current_speed, front, front_left, front_right
+            );
+        }
 
-    if input.throttle < 0.0 && (back < 0.6 || back_left < 0.6 || back_right < 0.6) {
-        input.throttle = 0.0;
-        input.brake = true;
-        input.steering = 0.0;
-        info!(
-            "AI: EMERGENCY STOP - Imminent back collision! (back: {:.2}, bl: {:.2}, br: {:.2})",
-            back, back_left, back_right
-        );
+        if input.throttle < 0.0 && (back < 0.8 || back_left < 0.8 || back_right < 0.8) {
+            input.throttle = 0.0;
+            input.brake = true;
+            input.steering = 0.0;
+            info!(
+                "AI: EMERGENCY BRAKE - Moving backward into obstacle! (speed: {:.2})",
+                current_speed
+            );
+        }
     }
 }
 

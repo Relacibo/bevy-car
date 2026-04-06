@@ -1,170 +1,761 @@
-   Compiling proc-macro2 v1.0.106
-   Compiling unicode-ident v1.0.24
-   Compiling quote v1.0.45
-   Compiling serde_core v1.0.228
-   Compiling cfg-if v1.0.4
-   Compiling libm v0.2.16
-   Compiling libc v0.2.184
-   Compiling log v0.4.29
-   Compiling smallvec v1.15.1
-   Compiling autocfg v1.5.0
-   Compiling cfg_aliases v0.2.1
-   Compiling serde v1.0.228
-   Compiling allocator-api2 v0.2.21
-   Compiling thiserror v2.0.18
-   Compiling num-traits v0.2.19
-   Compiling equivalent v1.0.2
-   Compiling foldhash v0.2.0
-   Compiling pin-project-lite v0.2.17
-   Compiling arrayvec v0.7.6
-   Compiling crossbeam-utils v0.8.21
-   Compiling winnow v1.0.1
-   Compiling hashbrown v0.16.1
-   Compiling toml_datetime v0.7.5+spec-1.1.0
-   Compiling syn v2.0.117
-   Compiling toml_parser v1.1.2+spec-1.1.0
-   Compiling winnow v0.7.15
-   Compiling indexmap v2.13.1
-   Compiling slab v0.4.12
-   Compiling parking v2.2.1
-   Compiling version_check v0.9.5
-   Compiling typewit v1.15.1
-   Compiling once_cell v1.21.4
-   Compiling const_panic v0.2.15
-   Compiling concurrent-queue v2.5.0
-   Compiling rand_core v0.9.5
-   Compiling toml_edit v0.23.10+spec-1.0.0
-   Compiling foldhash v0.1.5
-   Compiling rand v0.9.2
-   Compiling futures-core v0.3.32
-   Compiling hashbrown v0.15.5
-   Compiling rustix v1.1.4
-   Compiling find-msvc-tools v0.1.9
-   Compiling linux-raw-sys v0.12.1
-   Compiling getrandom v0.4.2
-   Compiling shlex v1.3.0
-   Compiling event-listener v5.4.1
-   Compiling cc v1.2.59
-   Compiling unicode-segmentation v1.13.2
-   Compiling fastrand v2.4.0
-   Compiling typeid v1.0.3
-   Compiling bevy_macro_utils v0.18.1
-   Compiling encase_derive_impl v0.12.0
-   Compiling futures-io v0.3.32
-   Compiling convert_case v0.10.0
-   Compiling event-listener-strategy v0.5.4
-   Compiling spin v0.10.0
-   Compiling unicode-xid v0.2.6
-   Compiling futures-lite v2.6.1
-   Compiling uuid v1.23.0
-   Compiling slotmap v1.1.1
-   Compiling thread_local v1.1.9
-   Compiling erased-serde v0.4.10
-   Compiling downcast-rs v2.0.2
-   Compiling disqualified v1.0.0
-   Compiling async-task v4.7.1
-   Compiling fixedbitset v0.5.7
-   Compiling atomic-waker v1.1.2
-   Compiling async-channel v2.5.0
-   Compiling inventory v0.3.24
-   Compiling bevy_ptr v0.18.1
-   Compiling memchr v2.8.0
-   Compiling nix v0.31.2
-   Compiling async-executor v1.14.0
-   Compiling crossbeam-queue v0.3.12
-   Compiling nonmax v0.5.5
-   Compiling bumpalo v3.20.2
-   Compiling zerocopy v0.8.48
-   Compiling bytemuck_derive v1.10.2
-   Compiling serde_derive v1.0.228
-   Compiling thiserror-impl v2.0.18
-   Compiling encase_derive v0.12.0
-   Compiling derive_more-impl v2.1.1
-   Compiling bevy_reflect_derive v0.18.1
-   Compiling assert_type_match v0.1.1
-   Compiling variadics_please v1.1.0
-   Compiling bevy_ecs_macros v0.18.1
-   Compiling zerocopy-derive v0.8.48
-   Compiling bevy_derive v0.18.1
-   Compiling bytemuck v1.25.0
-   Compiling encase v0.12.0
-   Compiling bitflags v2.11.0
-   Compiling glam v0.30.10
-   Compiling tracing-core v0.1.36
-   Compiling tracing-attributes v0.1.31
-   Compiling derive_more v2.1.1
-   Compiling ctrlc v3.5.2
-   Compiling either v1.15.0
-   Compiling wgpu-types v27.0.1
-   Compiling smol_str v0.2.2
-   Compiling bevy_platform v0.18.1
-   Compiling bevy_utils v0.18.1
-   Compiling petgraph v0.8.3
-   Compiling bevy_tasks v0.18.1
-   Compiling tracing v0.1.44
-   Compiling arrayref v0.3.9
-   Compiling pkg-config v0.3.32
-   Compiling libloading v0.8.9
-   Compiling aho-corasick v1.1.4
-   Compiling regex-syntax v0.8.10
-   Compiling polling v3.11.0
-   Compiling half v2.7.1
-   Compiling regex-automata v0.4.14
-   Compiling itertools v0.14.0
-   Compiling rand_distr v0.5.1
-   Compiling crossbeam-channel v0.5.15
-   Compiling bevy_reflect v0.18.1
-   Compiling blake3 v1.8.4
-   Compiling piper v0.2.5
-   Compiling async-io v2.6.0
-   Compiling simd-adler32 v0.3.9
-   Compiling crc32fast v1.5.0
-   Compiling blocking v1.6.2
-   Compiling sysinfo v0.37.2
-   Compiling futures-macro v0.3.32
-   Compiling async-lock v3.4.2
-   Compiling constant_time_eq v0.4.2
-   Compiling futures-task v0.3.32
-   Compiling adler2 v2.0.1
-   Compiling lazy_static v1.5.0
-   Compiling const-fnv1a-hash v1.1.0
-   Compiling cpufeatures v0.3.0
-   Compiling miniz_oxide v0.8.9
-   Compiling futures-util v0.3.32
-   Compiling async-fs v2.2.0
-   Compiling ron v0.12.1
-   Compiling bevy_asset_macros v0.18.1
-   Compiling async-broadcast v0.7.2
-   Compiling stackfuture v0.3.1
-   Compiling atomicow v1.1.0
-   Compiling flate2 v1.1.9
-   Compiling sharded-slab v0.1.7
-   Compiling matchers v0.2.0
-   Compiling fdeflate v0.3.7
-   Compiling tracing-log v0.2.0
-   Compiling bevy_ecs v0.18.1
-   Compiling bevy_math v0.18.1
-   Compiling pxfm v0.1.28
-   Compiling raw-window-handle v0.6.2
-   Compiling nu-ansi-term v0.50.3
-   Compiling png v0.18.1
-   Compiling tracing-subscriber v0.3.23
-   Compiling moxcms v0.8.1
-   Compiling euclid v0.22.14
-   Compiling twox-hash v2.1.2
-   Compiling svg_fmt v0.4.5
-   Compiling byteorder-lite v0.1.0
-   Compiling guillotiere v0.6.2
-   Compiling image v0.25.10
-   Compiling bevy_color v0.18.1
-   Compiling ruzstd v0.8.2
-   Compiling bevy_app v0.18.1
-   Compiling ktx2 v0.4.0
-   Compiling rectangle-pack v0.4.2
-   Compiling bevy_time v0.18.1
-   Compiling bevy_diagnostic v0.18.1
-   Compiling bevy_log v0.18.1
-   Compiling bevy_asset v0.18.1
-   Compiling const_soft_float v0.1.4
-   Compiling constgebra v0.1.4
-   Compiling bevy_transform v0.18.1
+warning: variable `back_left` is assigned to, but never used
+   --> src/main.rs:576:9
+    |
+576 |     let mut back_left = 20.0;
+    |         ^^^^^^^^^^^^^
+    |
+    = note: consider using `_back_left` instead
+    = note: `#[warn(unused_variables)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable `back_right` is assigned to, but never used
+   --> src/main.rs:577:9
+    |
+577 |     let mut back_right = 20.0;
+    |         ^^^^^^^^^^^^^^
+    |
+    = note: consider using `_back_right` instead
+
+warning: value assigned to `back_left` is never read
+   --> src/main.rs:588:53
+    |
+588 |                 DistanceSensorPosition::BackLeft => back_left = sensor.last_distance,
+    |                                                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+    = note: `#[warn(unused_assignments)]` (part of `#[warn(unused)]`) on by default
+
+warning: value assigned to `back_right` is never read
+   --> src/main.rs:589:54
+    |
+589 |                 DistanceSensorPosition::BackRight => back_right = sensor.last_distance,
+    |                                                      ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: unused variable: `car_pos`
+   --> src/main.rs:800:9
+    |
+800 |     let car_pos = car_transform.translation;
+    |         ^^^^^^^ help: if this is intentional, prefix it with an underscore: `_car_pos`
+
+warning: variable `left` is assigned to, but never used
+   --> src/main.rs:965:9
+    |
+965 |     let mut left = 10.0;
+    |         ^^^^^^^^
+    |
+    = note: consider using `_left` instead
+
+warning: variable `right` is assigned to, but never used
+   --> src/main.rs:966:9
+    |
+966 |     let mut right = 10.0;
+    |         ^^^^^^^^^
+    |
+    = note: consider using `_right` instead
+
+warning: value assigned to `left` is never read
+   --> src/main.rs:980:45
+    |
+980 |             DistanceSensorPosition::Left => left = sensor.last_distance,
+    |                                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: value assigned to `right` is never read
+   --> src/main.rs:981:46
+    |
+981 |             DistanceSensorPosition::Right => right = sensor.last_distance,
+    |                                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+    |
+    = help: maybe it is overwritten before being read?
+
+warning: fields `decision_timer` and `target_angle` are never read
+  --> src/main.rs:53:5
+   |
+51 | struct AiDriver {
+   |        -------- fields in this struct
+52 |     enabled: bool,
+53 |     decision_timer: Timer,
+   |     ^^^^^^^^^^^^^^
+54 |     state: ParkingState,
+55 |     target_angle: f32,
+   |     ^^^^^^^^^^^^
+   |
+   = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: constant `SAFE_DISTANCE` is never used
+   --> src/main.rs:949:11
+    |
+949 |     const SAFE_DISTANCE: f32 = 1.5;
+    |           ^^^^^^^^^^^^^
+
+warning: `bevy-car` (bin "bevy-car") generated 11 warnings (run `cargo fix --bin "bevy-car" -p bevy-car` to apply 1 suggestion)
+    Finished `dev` profile [unoptimized + debuginfo] target(s) in 0.13s
+     Running `target/debug/bevy-car`
+[2m2026-04-06T18:53:07.469494Z[0m [32m INFO[0m [2mbevy_diagnostic::system_information_diagnostics_plugin::internal[0m[2m:[0m SystemInfo { os: "Linux (CachyOS Linux rolling)", kernel: "6.19.10-1-cachyos", cpu: "Intel(R) Core(TM) Ultra 9 288V", core_count: "8", memory: "30.9 GiB" }
+[2m2026-04-06T18:53:07.478453Z[0m [32m INFO[0m [2mbevy_render::renderer[0m[2m:[0m AdapterInfo { name: "Intel(R) Graphics (LNL)", vendor: 32902, device: 25760, device_type: IntegratedGpu, driver: "Intel open-source Mesa driver", driver_info: "Mesa 26.0.3-arch2.2", backend: Vulkan }
+[2m2026-04-06T18:53:07.577874Z[0m [32m INFO[0m [2mgilrs_core::platform::platform::gamepad[0m[2m:[0m Gamepad /dev/input/event23 (Keychron Keychron Q7 System Control) connected.
+[2m2026-04-06T18:53:07.578015Z[0m [32m INFO[0m [2mgilrs_core::platform::platform::gamepad[0m[2m:[0m Gamepad /dev/input/event26 (Ducky Ducky One 3 TKL ) connected.
+[2m2026-04-06T18:53:07.578187Z[0m [33m WARN[0m [2mgilrs::gamepad[0m[2m:[0m No mapping found for UUID 03000000-3434-0000-7201-000011010000
+	Default mapping will be used.
+[2m2026-04-06T18:53:07.578217Z[0m [33m WARN[0m [2mgilrs::gamepad[0m[2m:[0m No mapping found for UUID 03000000-3332-0000-1180-000010010000
+	Default mapping will be used.
+[2m2026-04-06T18:53:07.641815Z[0m [32m INFO[0m [2mbevy_render::batching::gpu_preprocessing[0m[2m:[0m GPU preprocessing is fully supported on this device.
+[2m2026-04-06T18:53:07.648569Z[0m [32m INFO[0m [2mbevy_winit::system[0m[2m:[0m Creating new window bevy-car (0v0)
+[2m2026-04-06T18:53:07.652371Z[0m [33m WARN[0m [2mbevy_ecs::hierarchy[0m[2m:[0m warning[B0004]: Entity 64v0 with the <Enable the debug feature to see the name> component has a parent (63v0 entity) without <Enable the debug feature to see the name>.
+This will cause inconsistent behaviors! See: https://bevy.org/learn/errors/b0004
+[2m2026-04-06T18:53:07.652586Z[0m [33m WARN[0m [2mbevy_ecs::hierarchy[0m[2m:[0m warning[B0004]: Entity 66v0 with the <Enable the debug feature to see the name> component has a parent (65v0 entity) without <Enable the debug feature to see the name>.
+This will cause inconsistent behaviors! See: https://bevy.org/learn/errors/b0004
+[2m2026-04-06T18:53:07.661287Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 18v0 connected.
+[2m2026-04-06T18:53:07.661326Z[0m [32m INFO[0m [2mbevy_input::gamepad[0m[2m:[0m Gamepad 20v0 connected.
+[2m2026-04-06T18:53:08.552359Z[0m [32m INFO[0m [2mbevy_car[0m[2m:[0m AI: Approach -> Align (obstacle at 2.46m)
+[2m2026-04-06T18:53:08.706098Z[0m [32m INFO[0m [2mbevy_car[0m[2m:[0m AI: Align -> Enter (aligned, angle=0.00rad)
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 1.0,
+    "throttle": 0.4000000059604645
+  },
+  "car_forward": {
+    "x": 1.1641532356165829e-11,
+    "z": -1.0
+  },
+  "car_position": {
+    "x": -3.5,
+    "y": 0.7967773079872131,
+    "z": -1.5101481676101685
+  },
+  "car_rotation_y_deg": -6.670106689199429e-10,
+  "car_speed": 0.202646866440773,
+  "sensors": {
+    "back": 7.3668341636657715,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 2.5001473426818848,
+    "front_left": 10.0,
+    "front_right": 10.0,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 1.0084384679794312,
+  "velocity": {
+    "x": 2.359119843919899e-12,
+    "z": -0.202646866440773
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 1.0,
+    "throttle": 0.24000000953674316
+  },
+  "car_forward": {
+    "x": -0.09301197528839111,
+    "z": -0.9956651329994202
+  },
+  "car_position": {
+    "x": -3.525181293487549,
+    "y": 0.7989303469657898,
+    "z": -2.1692302227020264
+  },
+  "car_rotation_y_deg": 5.336907386779785,
+  "car_speed": 0.8074579238891602,
+  "sensors": {
+    "back": 8.061107635498047,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 1.8355778455734253,
+    "front_left": 10.0,
+    "front_right": 10.0,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 2.0059895515441895,
+  "velocity": {
+    "x": -0.07361134141683578,
+    "z": -0.8040955066680908
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 1.0,
+    "throttle": 0.24000000953674316
+  },
+  "car_forward": {
+    "x": -0.22469377517700195,
+    "z": -0.9744293689727783
+  },
+  "car_position": {
+    "x": -3.6524343490600586,
+    "y": 0.7989296913146973,
+    "z": -2.967449903488159
+  },
+  "car_rotation_y_deg": 12.984871864318848,
+  "car_speed": 0.843982458114624,
+  "sensors": {
+    "back": 9.100170135498047,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.9374260902404785,
+    "front_left": 10.0,
+    "front_right": 1.1484215259552002,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 3.002829074859619,
+  "velocity": {
+    "x": -0.18816137313842773,
+    "z": -0.822740375995636
+  }
+}
+[2m2026-04-06T18:53:11.133129Z[0m [33m WARN[0m [2mbevy_gltf::loader[0m[2m:[0m Unknown vertex attribute TEXCOORD_2
+[2m2026-04-06T18:53:11.293661Z[0m [32m INFO[0m [2mbevy_car[0m[2m:[0m AI: Enter -> Adjust (front obstacle at 0.98m)
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.71622371673584,
+    "y": 0.7989324927330017,
+    "z": -3.2245516777038574
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.4306523460637663e-10,
+  "sensors": {
+    "back": 9.445229530334473,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.59764289855957,
+    "front_left": 10.0,
+    "front_right": 0.7778730392456055,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 4.006972789764404,
+  "velocity": {
+    "x": 1.4498443244581605e-11,
+    "z": 5.799377297832642e-11
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162375450134277,
+    "y": 0.7989312410354614,
+    "z": -3.2246055603027344
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.325764719701695e-10,
+  "sensors": {
+    "back": 9.445284843444824,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597599506378174,
+    "front_left": 10.0,
+    "front_right": 0.7778087854385376,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 5.005510330200195,
+  "velocity": {
+    "x": -1.4500670629524759e-11,
+    "z": -5.8002682518099036e-11
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162375450134277,
+    "y": 0.7989335060119629,
+    "z": -3.2246055603027344
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 1.0152665513851744e-10,
+  "sensors": {
+    "back": 9.445284843444824,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597599506378174,
+    "front_left": 10.0,
+    "front_right": 0.7778050303459167,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 6.003194332122803,
+  "velocity": {
+    "x": 0.0,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989367842674255,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 3.5278871490795893e-10,
+  "sensors": {
+    "back": 9.445284843444824,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597588539123535,
+    "front_left": 10.0,
+    "front_right": 0.777810275554657,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 7.002066612243652,
+  "velocity": {
+    "x": 2.3167227858333916e-10,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989314794540405,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.4692309308349536e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.7778003215789795,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 8.007040977478027,
+  "velocity": {
+    "x": 1.4499823217106744e-11,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989304661750793,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 1.1697920410114193e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.777798593044281,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 9.008350372314453,
+  "velocity": {
+    "x": 0.0,
+    "z": -5.803793903802479e-11
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989320755004883,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.1799652361043087e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.5975799560546875,
+    "front_left": 10.0,
+    "front_right": 0.777795672416687,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 10.008541107177734,
+  "velocity": {
+    "x": 1.4500913490811396e-11,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989321947097778,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.922488639978127e-11,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.7777968049049377,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 11.001848220825195,
+  "velocity": {
+    "x": -2.8999209283897542e-11,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989320158958435,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.2436115465485074e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.7777860164642334,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 12.00911808013916,
+  "velocity": {
+    "x": 0.0,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989304661750793,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 1.196739235487243e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580432891846,
+    "front_left": 10.0,
+    "front_right": 0.7777824997901917,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 13.001004219055176,
+  "velocity": {
+    "x": -2.9025190237397247e-11,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.798931360244751,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.459025760792599e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.7777857184410095,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 14.005597114562988,
+  "velocity": {
+    "x": -2.9009617624753403e-11,
+    "z": -1.1603847049901361e-10
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989295125007629,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 1.0978157272134581e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597590446472168,
+    "front_left": 10.0,
+    "front_right": 0.7777746319770813,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 15.000801086425781,
+  "velocity": {
+    "x": -1.4509141284257954e-11,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.7162396907806396,
+    "y": 0.7989305257797241,
+    "z": -3.224613666534424
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.6902502447967436e-10,
+  "sensors": {
+    "back": 9.445293426513672,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597580909729004,
+    "front_left": 10.0,
+    "front_right": 0.7777737975120544,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 16.011417388916016,
+  "velocity": {
+    "x": -5.8014155979169146e-11,
+    "z": -1.1602831195833829e-10
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.716308832168579,
+    "y": 0.7989317774772644,
+    "z": -3.2248852252960205
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 9.268910083903847e-10,
+  "sensors": {
+    "back": 9.445455551147461,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.597427845001221,
+    "front_left": 10.0,
+    "front_right": 0.7775758504867554,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 17.00469207763672,
+  "velocity": {
+    "x": 0.0,
+    "z": 9.266891143333567e-10
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.718656539916992,
+    "y": 0.7989357113838196,
+    "z": -3.2340571880340576
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.3167227858333916e-10,
+  "sensors": {
+    "back": 9.455012321472168,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.587871551513672,
+    "front_left": 10.0,
+    "front_right": 0.7660369277000427,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 18.00023078918457,
+  "velocity": {
+    "x": 2.3167227858333916e-10,
+    "z": 0.0
+  }
+}
+{
+  "ai_enabled": true,
+  "ai_input": {
+    "brake": false,
+    "steering": 0.5,
+    "throttle": 0.15000000596046448
+  },
+  "car_forward": {
+    "x": -0.24800163507461548,
+    "z": -0.9687597751617432
+  },
+  "car_position": {
+    "x": -3.718724012374878,
+    "y": 0.7989320158958435,
+    "z": -3.234321117401123
+  },
+  "car_rotation_y_deg": 14.359291076660156,
+  "car_speed": 2.2443251423975852e-10,
+  "sensors": {
+    "back": 9.455313682556152,
+    "back_left": 10.0,
+    "back_right": 10.0,
+    "front": 5.587560176849365,
+    "front_left": 10.0,
+    "front_right": 0.7656770348548889,
+    "left": 10.0,
+    "right": 10.0
+  },
+  "timestamp": 19.00607681274414,
+  "velocity": {
+    "x": 0.0,
+    "z": 0.0
+  }
+}
