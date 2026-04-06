@@ -35,9 +35,6 @@ jobs:
       - name: Build WASM
         run: ./scripts/build-wasm.sh
 
-      - name: Copy index.html
-        run: cp public/index.html dist/index.html
-
       - name: Setup Pages
         uses: actions/configure-pages@v5
       
