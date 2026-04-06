@@ -366,6 +366,30 @@ App::new()
 
 ---
 
+### ✅ CORRECT: Group run conditions on multiple systems
+```rust
+App::new()
+    .add_systems(Update, (
+        (system1, system2).run_if(condition),
+        system3,
+    ))
+```
+
+### ❌ WRONG: Repeating run_if on each system
+```rust
+// Verbose - repeats the same condition
+App::new()
+    .add_systems(Update, (
+        system1.run_if(condition),
+        system2.run_if(condition),
+        system3,
+    ))
+```
+
+**Why**: You can apply `.run_if()` to a tuple of systems, making the condition apply to all of them at once. This is cleaner and more maintainable.
+
+---
+
 ## General Guidelines
 
 1. **Avoid panic-prone APIs**: Prefer `Single` over `Query::single()`

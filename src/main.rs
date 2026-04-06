@@ -32,13 +32,15 @@ fn main() {
         )
         .add_systems(Update, ai_parking_system.after(toggle_ai_system))
         .add_systems(Update, car_control_system.after(ai_parking_system))
-        .add_systems(Update, update_debug_ui.run_if(should_display_debug_ui))
+        .add_systems(
+            Update,
+            (update_debug_ui, draw_sensor_gizmos).run_if(should_display_debug_ui),
+        )
         .add_systems(
             Update,
             toggle_debug_ui.run_if(input_just_pressed(KeyCode::F3)),
         )
         .add_systems(Update, debug_sensors)
-        .add_systems(Update, draw_sensor_gizmos.run_if(should_display_debug_ui))
         .run();
 }
 
@@ -836,10 +838,18 @@ fn update_sensors(
             DistanceSensorPosition::Back => -car_forward_xz,
             DistanceSensorPosition::Left => -car_right_xz,
             DistanceSensorPosition::Right => car_right_xz,
-            DistanceSensorPosition::FrontLeft => (car_forward_xz * 1.732 - car_right_xz).normalize(),
-            DistanceSensorPosition::FrontRight => (car_forward_xz * 1.732 + car_right_xz).normalize(),
-            DistanceSensorPosition::BackLeft => (-car_forward_xz * 1.732 - car_right_xz).normalize(),
-            DistanceSensorPosition::BackRight => (-car_forward_xz * 1.732 + car_right_xz).normalize(),
+            DistanceSensorPosition::FrontLeft => {
+                (car_forward_xz * 1.732 - car_right_xz).normalize()
+            }
+            DistanceSensorPosition::FrontRight => {
+                (car_forward_xz * 1.732 + car_right_xz).normalize()
+            }
+            DistanceSensorPosition::BackLeft => {
+                (-car_forward_xz * 1.732 - car_right_xz).normalize()
+            }
+            DistanceSensorPosition::BackRight => {
+                (-car_forward_xz * 1.732 + car_right_xz).normalize()
+            }
         };
 
         // Raycast mit Ausschluss des eigenen Autos
@@ -983,7 +993,9 @@ fn ai_parking_system(
             DistanceSensorPosition::Left => sensor_readings.left = sensor.last_distance,
             DistanceSensorPosition::Right => sensor_readings.right = sensor.last_distance,
             DistanceSensorPosition::FrontLeft => sensor_readings.front_left = sensor.last_distance,
-            DistanceSensorPosition::FrontRight => sensor_readings.front_right = sensor.last_distance,
+            DistanceSensorPosition::FrontRight => {
+                sensor_readings.front_right = sensor.last_distance
+            }
             DistanceSensorPosition::BackLeft => sensor_readings.back_left = sensor.last_distance,
             DistanceSensorPosition::BackRight => sensor_readings.back_right = sensor.last_distance,
         }
@@ -1066,10 +1078,18 @@ fn draw_sensor_gizmos(
             DistanceSensorPosition::Back => -car_forward_xz,
             DistanceSensorPosition::Left => -car_right_xz,
             DistanceSensorPosition::Right => car_right_xz,
-            DistanceSensorPosition::FrontLeft => (car_forward_xz * 1.732 - car_right_xz).normalize(),
-            DistanceSensorPosition::FrontRight => (car_forward_xz * 1.732 + car_right_xz).normalize(),
-            DistanceSensorPosition::BackLeft => (-car_forward_xz * 1.732 - car_right_xz).normalize(),
-            DistanceSensorPosition::BackRight => (-car_forward_xz * 1.732 + car_right_xz).normalize(),
+            DistanceSensorPosition::FrontLeft => {
+                (car_forward_xz * 1.732 - car_right_xz).normalize()
+            }
+            DistanceSensorPosition::FrontRight => {
+                (car_forward_xz * 1.732 + car_right_xz).normalize()
+            }
+            DistanceSensorPosition::BackLeft => {
+                (-car_forward_xz * 1.732 - car_right_xz).normalize()
+            }
+            DistanceSensorPosition::BackRight => {
+                (-car_forward_xz * 1.732 + car_right_xz).normalize()
+            }
         };
 
         // Bestimme Farbe basierend auf Distanz
