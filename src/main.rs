@@ -3,6 +3,8 @@ use bevy::input::common_conditions::input_just_pressed;
 use bevy::prelude::*;
 use bevy_rapier3d::prelude::*;
 
+mod parking_ai;
+
 fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
@@ -18,13 +20,13 @@ fn main() {
         )
         .add_systems(Update, ai_parking_system.after(toggle_ai_system))
         .add_systems(Update, car_control_system.after(ai_parking_system))
-        .add_systems(Update, update_debug_ui)
+        .add_systems(Update, update_debug_ui.run_if(should_display_debug_ui))
         .add_systems(
             Update,
             toggle_debug_ui.run_if(input_just_pressed(KeyCode::F3)),
         )
         .add_systems(Update, debug_sensors)
-        .add_systems(Update, draw_sensor_gizmos)
+        .add_systems(Update, draw_sensor_gizmos.run_if(should_display_debug_ui))
         .run();
 }
 
@@ -37,22 +39,10 @@ struct DebugUI;
 #[derive(Component)]
 struct DebugText;
 
-#[derive(Debug, Clone, Copy, PartialEq)]
-enum ParkingState {
-    Reversing,
-    Approach,
-    Align,
-    Enter,
-    Adjust,
-    Parked,
-}
-
 #[derive(Component)]
 struct AiDriver {
     enabled: bool,
-    decision_timer: Timer,
-    state: ParkingState,
-    target_angle: f32,
+    ai: parking_ai::ParkingAI,
 }
 
 #[derive(Component)]
@@ -366,9 +356,7 @@ fn setup_scene(
             PlayerCar,
             AiDriver {
                 enabled: true,
-                decision_timer: Timer::from_seconds(0.25, TimerMode::Repeating),
-                state: ParkingState::Approach,
-                target_angle: 0.0,
+                ai: parking_ai::ParkingAI::default(),
             },
             CarControls {
                 acceleration: 10.0,
@@ -542,6 +530,9 @@ fn toggle_debug_ui(debug_ui: Single<&mut Visibility, With<DebugUI>>) {
         Visibility::Hidden => Visibility::Visible,
         _ => Visibility::Hidden,
     };
+}
+fn should_display_debug_ui(debug_ui: Single<&Visibility, With<DebugUI>>) -> bool {
+    matches!(*debug_ui.into_inner(), Visibility::Visible)
 }
 
 fn update_debug_ui(
@@ -941,33 +932,32 @@ fn debug_sensors(
 }
 
 fn ai_parking_system(
+    time: Res<Time>,
     car_query: Single<(Entity, &Transform, &Velocity, &mut AiDriver), With<PlayerCar>>,
     input_query: Single<&mut CarInput, With<PlayerCar>>,
     spot_query: Single<&Transform, With<ParkingSpot>>,
     sensors: Query<(&DistanceSensor, &ChildOf)>,
 ) {
-    const SAFE_DISTANCE: f32 = 1.5;
-    let (car_entity, car_transform, velocity, mut ai) = car_query.into_inner();
+    let (car_entity, car_transform, velocity, mut ai_driver) = car_query.into_inner();
 
-    if !ai.enabled {
+    if !ai_driver.enabled {
         return;
     }
 
     let mut input = input_query.into_inner();
-
     let spot_transform = spot_query.into_inner();
-    let target_pos = spot_transform.translation;
-    let car_pos = car_transform.translation;
 
-    // Sensor-Werte auslesen
-    let mut front = 10.0;
-    let mut back = 10.0;
-    let mut left = 10.0;
-    let mut right = 10.0;
-    let mut front_left = 10.0;
-    let mut front_right = 10.0;
-    let mut back_left = 10.0;
-    let mut back_right = 10.0;
+    // Collect sensor readings
+    let mut sensor_readings = parking_ai::SensorReadings {
+        front: 10.0,
+        back: 10.0,
+        left: 10.0,
+        right: 10.0,
+        front_left: 10.0,
+        front_right: 10.0,
+        back_left: 10.0,
+        back_right: 10.0,
+    };
 
     for (sensor, parent) in sensors.iter() {
         if parent.get() != car_entity {
@@ -975,247 +965,49 @@ fn ai_parking_system(
         }
 
         match sensor.position {
-            DistanceSensorPosition::Front => front = sensor.last_distance,
-            DistanceSensorPosition::Back => back = sensor.last_distance,
-            DistanceSensorPosition::Left => left = sensor.last_distance,
-            DistanceSensorPosition::Right => right = sensor.last_distance,
-            DistanceSensorPosition::FrontLeft => front_left = sensor.last_distance,
-            DistanceSensorPosition::FrontRight => front_right = sensor.last_distance,
-            DistanceSensorPosition::BackLeft => back_left = sensor.last_distance,
-            DistanceSensorPosition::BackRight => back_right = sensor.last_distance,
+            DistanceSensorPosition::Front => sensor_readings.front = sensor.last_distance,
+            DistanceSensorPosition::Back => sensor_readings.back = sensor.last_distance,
+            DistanceSensorPosition::Left => sensor_readings.left = sensor.last_distance,
+            DistanceSensorPosition::Right => sensor_readings.right = sensor.last_distance,
+            DistanceSensorPosition::FrontLeft => sensor_readings.front_left = sensor.last_distance,
+            DistanceSensorPosition::FrontRight => sensor_readings.front_right = sensor.last_distance,
+            DistanceSensorPosition::BackLeft => sensor_readings.back_left = sensor.last_distance,
+            DistanceSensorPosition::BackRight => sensor_readings.back_right = sensor.last_distance,
         }
     }
 
-    let to_target = target_pos - car_pos;
-    let distance = (Vec2::new(to_target.x, to_target.z)).length();
-    let current_speed = velocity.linvel.length();
-
-    // Auto-Vorwärtsrichtung
-    let car_forward = car_transform.forward();
-    let car_forward_xz = Vec3::new(car_forward.x, 0.0, car_forward.z).normalize();
-
-    // Ziel-Ausrichtung (parallel zum Zaun = -Z-Richtung)
-    let target_forward = Vec3::NEG_Z;
-    let alignment_angle = car_forward_xz.dot(target_forward).acos();
-
-    // Steering helper - bestimmt Richtung zum Ziel
-    let car_right = car_transform.right();
-    let car_right_xz = Vec3::new(car_right.x, 0.0, car_right.z).normalize();
-    let side_offset = to_target.normalize().dot(car_right_xz);
-
-    // Dynamisches Throttle basierend auf Sensor-Distanz
-    let calculate_safe_throttle = |sensor_distance: f32, base_throttle: f32| -> f32 {
-        if sensor_distance < 1.0 {
-            base_throttle * 0.3 // Sehr langsam
-        } else if sensor_distance < 2.0 {
-            base_throttle * 0.6 // Mittel
-        } else {
-            base_throttle // Voll
-        }
+    // Prepare state for AI
+    let car_state = parking_ai::CarState {
+        position: car_transform.translation.to_array(),
+        forward: car_transform.forward().to_array(),
+        right: car_transform.right().to_array(),
+        speed: velocity.linvel.length(),
     };
 
-    // State Machine Logik - Forward Parking
-    match ai.state {
-        ParkingState::Reversing => {
-            // Phase 0: Rückwärts fahren, um Platz zu schaffen
-            // Prüfe nur BACK-Sensoren (da wir rückwärts fahren)
-            let min_back_distance = back.min(back_left).min(back_right);
+    let target_state = parking_ai::TargetState {
+        position: spot_transform.translation.to_array(),
+        forward: spot_transform.forward().to_array(),
+    };
 
-            if min_back_distance < 1.5 {
-                // Kein Platz mehr hinten - stopp und wechsel zu Approach
-                ai.state = ParkingState::Approach;
-                info!(
-                    "AI: Reversing -> Approach (back obstacle at {:.2}m)",
-                    min_back_distance
-                );
-                input.throttle = 0.0;
-                input.brake = true;
-            } else if front > 4.5 {
-                // Genug Platz geschaffen - wechsel zu Approach
-                ai.state = ParkingState::Approach;
-                info!(
-                    "AI: Reversing -> Approach (enough space created, front={:.2}m)",
-                    front
-                );
-                input.throttle = 0.0;
-                input.brake = true;
-            } else {
-                // Weiter rückwärts - dynamisches Throttle basierend auf hinteren Sensoren
-                let base_reverse_throttle = -0.7;
-                input.throttle = calculate_safe_throttle(min_back_distance, base_reverse_throttle);
-                input.steering = 0.0;
-                input.brake = false;
-            }
-        }
+    // Get AI decision
+    let control = ai_driver.ai.update(
+        time.elapsed_secs(),
+        car_state,
+        target_state,
+        sensor_readings,
+    );
 
-        ParkingState::Approach => {
-            // Phase 1: Fahre in Richtung Parkplatz
-            // Prüfe nur FRONT-Sensoren (da wir vorwärts fahren)
-            let min_front_distance = front.min(front_left).min(front_right);
+    // Apply control to car
+    input.throttle = control.throttle;
+    input.steering = control.steering;
+    input.brake = control.brake;
 
-            if min_front_distance < 2.0 && back > 3.0 {
-                // Zu nah vorne, frei hinten - erstmal rückwärts
-                ai.state = ParkingState::Reversing;
-                info!(
-                    "AI: Approach -> Reversing (front blocked at {:.2}m, creating space)",
-                    min_front_distance
-                );
-                let min_back_distance = back.min(back_left).min(back_right);
-                let base_reverse_throttle = -0.7;
-                input.throttle = calculate_safe_throttle(min_back_distance, base_reverse_throttle);
-                input.steering = 0.0;
-                input.brake = false;
-            } else if min_front_distance < 2.5 {
-                // Zu nah - wechsle zu Align
-                ai.state = ParkingState::Align;
-                info!(
-                    "AI: Approach -> Align (obstacle at {:.2}m)",
-                    min_front_distance
-                );
-                input.throttle = 0.0;
-                input.brake = true;
-            } else if distance > 6.0 {
-                // Weit weg - fahre mit dynamischem Throttle
-                let base_throttle = 0.5;
-                input.throttle = calculate_safe_throttle(min_front_distance, base_throttle);
-                input.steering = (side_offset * 0.7).clamp(-1.0, 1.0);
-                input.brake = false;
-            } else {
-                // Nahe genug - wechsle zu Align
-                ai.state = ParkingState::Align;
-                info!(
-                    "AI: Approach -> Align (close enough, distance={:.2}m)",
-                    distance
-                );
-            }
-        }
-
-        ParkingState::Align => {
-            // Phase 2: Richte Auto parallel zum Parkplatz aus
-            let is_aligned = alignment_angle < 0.08; // ~4.5 Grad Toleranz
-            let min_front_distance = front.min(front_left).min(front_right);
-
-            if is_aligned {
-                ai.state = ParkingState::Enter;
-                info!(
-                    "AI: Align -> Enter (aligned, angle={:.2}rad)",
-                    alignment_angle
-                );
-            } else if min_front_distance < 1.5 {
-                // Zu nah am Hindernis - stopp
-                input.throttle = 0.0;
-                input.brake = true;
-                input.steering = 0.0;
-                info!(
-                    "AI: Align paused (front obstacle at {:.2}m)",
-                    min_front_distance
-                );
-            } else {
-                // Drehe das Auto zur richtigen Ausrichtung
-                let cross = car_forward_xz.cross(target_forward).y;
-                input.steering = if cross > 0.0 { 1.0 } else { -1.0 };
-
-                // Langsam vorwärts während des Drehens - dynamisches Throttle
-                let base_throttle = 0.3;
-                input.throttle = calculate_safe_throttle(min_front_distance, base_throttle);
-                input.brake = false;
-            }
-        }
-
-        ParkingState::Enter => {
-            // Phase 3: Fahre vorwärts in den Parkplatz
-            let lateral_offset = car_pos.x - target_pos.x;
-            let z_distance = (car_pos.z - target_pos.z).abs();
-            let min_front_distance = front.min(front_left).min(front_right);
-
-            if z_distance < 0.5 && lateral_offset.abs() < 0.3 {
-                // Nah genug - zur Feinabstimmung
-                ai.state = ParkingState::Adjust;
-                info!("AI: Enter -> Adjust (close to target)");
-            } else if min_front_distance < 1.0 {
-                // Zu nah - stopp!
-                input.throttle = 0.0;
-                input.brake = true;
-                ai.state = ParkingState::Adjust;
-                info!(
-                    "AI: Enter -> Adjust (front obstacle at {:.2}m)",
-                    min_front_distance
-                );
-            } else {
-                // Fahre vorwärts und korrigiere seitlich - dynamisches Throttle
-                let base_throttle = 0.4;
-                input.throttle = calculate_safe_throttle(min_front_distance, base_throttle);
-                input.brake = false;
-
-                // Lenke, um zu zentrieren
-                if lateral_offset.abs() > 0.1 {
-                    input.steering = (-lateral_offset * 0.5).clamp(-1.0, 1.0);
-                } else {
-                    input.steering = 0.0;
-                }
-            }
-        }
-
-        ParkingState::Adjust => {
-            // Phase 4: Feinabstimmung
-            let lateral_offset = car_pos.x - target_pos.x;
-            let z_distance = (car_pos.z - target_pos.z).abs();
-            let is_centered = lateral_offset.abs() < 0.15;
-            let is_at_target = z_distance < 0.3;
-            let is_aligned = alignment_angle < 0.05;
-            let is_stopped = current_speed < 0.05;
-
-            if is_centered && is_at_target && is_aligned && is_stopped {
-                ai.state = ParkingState::Parked;
-                info!("AI: Adjust -> Parked! SUCCESS!");
-            } else {
-                // Sehr langsame Korrektur
-                if !is_centered {
-                    input.throttle = 0.15;
-                    input.steering = (-lateral_offset * 0.8).clamp(-0.5, 0.5);
-                    input.brake = false;
-                } else if !is_at_target && front > 0.5 {
-                    input.throttle = 0.2;
-                    input.steering = 0.0;
-                    input.brake = false;
-                } else {
-                    input.throttle = 0.0;
-                    input.brake = true;
-                    input.steering = 0.0;
-                }
-            }
-        }
-
-        ParkingState::Parked => {
-            // Phase 5: Erfolgreich geparkt!
-            input.throttle = 0.0;
-            input.steering = 0.0;
-            input.brake = true;
-        }
-    }
-
-    // SICHERHEITSPRÜFUNG: Nur stoppen wenn SCHNELL fahrend UND Kollision droht
-    let current_speed = velocity.linvel.length();
-    if current_speed > 1.0 {
-        if input.throttle > 0.0 && (front < 0.8 || front_left < 0.8 || front_right < 0.8) {
-            input.throttle = 0.0;
-            input.brake = true;
-            input.steering = 0.0;
-            info!(
-                "AI: EMERGENCY BRAKE - Moving forward into obstacle! (speed: {:.2}, front: {:.2}, fl: {:.2}, fr: {:.2})",
-                current_speed, front, front_left, front_right
-            );
-        }
-
-        if input.throttle < 0.0 && (back < 0.8 || back_left < 0.8 || back_right < 0.8) {
-            input.throttle = 0.0;
-            input.brake = true;
-            input.steering = 0.0;
-            info!(
-                "AI: EMERGENCY BRAKE - Moving backward into obstacle! (speed: {:.2})",
-                current_speed
-            );
-        }
+    // Debug logging
+    if time.elapsed_secs() % 1.0 < 0.1 {
+        info!(
+            "AI State: {:?}, Throttle: {:.2}, Steering: {:.2}, Brake: {}",
+            ai_driver.ai.state, control.throttle, control.steering, control.brake
+        );
     }
 }
 
