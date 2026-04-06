@@ -4,9 +4,10 @@ version = "0.1.0"
 edition = "2024"
 
 [dependencies]
-bevy = "0.18"
-bevy_rapier3d = "0.33.0"
+bevy = { version = "0.18", features = ["bevy_ci_testing"] }
+bevy_rapier3d = { version = "0.33.0", features = ["wasm-bindgen"] }
 serde_json = "1.0"
+libm = "0.2"
 
 [target.'cfg(target_arch = "wasm32")']
 runner = "wasm-server-runner"
