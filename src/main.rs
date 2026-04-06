@@ -6,42 +6,43 @@ use bevy_rapier3d::prelude::*;
 mod parking_ai;
 
 fn main() {
-    App::new()
-        .add_plugins(
-            DefaultPlugins
-                .set(WindowPlugin {
-                    primary_window: Some(Window {
-                        title: "Bevy Car - Parking Game".to_owned(),
-                        #[cfg(target_family = "wasm")]
-                        canvas: Some("#bevy-canvas".into()),
-                        ..default()
-                    }),
+    let mut app = App::new();
+    app.add_plugins(
+        DefaultPlugins
+            .set(WindowPlugin {
+                primary_window: Some(Window {
+                    title: "Bevy Car - Parking Game".to_owned(),
+                    #[cfg(target_family = "wasm")]
+                    canvas: Some("#bevy-canvas".into()),
                     ..default()
-                })
-                .set(ImagePlugin::default_nearest()),
-        )
-        .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
-        .add_plugins(RapierDebugRenderPlugin::default())
-        .insert_resource(DebugTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
-        .add_systems(Startup, setup_scene)
-        .add_systems(Startup, setup_debug_ui)
-        .add_systems(Update, update_sensors)
-        .add_systems(
-            Update,
-            toggle_ai_system.run_if(input_just_pressed(KeyCode::KeyP)),
-        )
-        .add_systems(Update, ai_parking_system.after(toggle_ai_system))
-        .add_systems(Update, car_control_system.after(ai_parking_system))
-        .add_systems(
-            Update,
-            (update_debug_ui, draw_sensor_gizmos).run_if(should_display_debug_ui),
-        )
-        .add_systems(
-            Update,
-            toggle_debug_ui.run_if(input_just_pressed(KeyCode::F3)),
-        )
-        .add_systems(Update, debug_sensors)
-        .run();
+                }),
+                ..default()
+            })
+            .set(ImagePlugin::default_nearest()),
+    )
+    .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
+    .add_plugins(RapierDebugRenderPlugin::default())
+    .insert_resource(DebugTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
+    .add_systems(Startup, setup_scene)
+    .add_systems(Startup, setup_debug_ui)
+    .add_systems(Update, update_sensors)
+    .add_systems(
+        Update,
+        toggle_ai_system.run_if(input_just_pressed(KeyCode::KeyP)),
+    )
+    .add_systems(Update, ai_parking_system.after(toggle_ai_system))
+    .add_systems(Update, car_control_system.after(ai_parking_system))
+    .add_systems(
+        Update,
+        (update_debug_ui, draw_sensor_gizmos).run_if(should_display_debug_ui),
+    )
+    .add_systems(
+        Update,
+        toggle_debug_ui.run_if(input_just_pressed(KeyCode::F3)),
+    );
+    #[cfg(debug_assertions)]
+    app.add_systems(Update, debug_sensors);
+    app.run();
 }
 
 #[derive(Resource)]
@@ -1024,12 +1025,15 @@ fn ai_parking_system(
     input.steering = control.steering;
     input.brake = control.brake;
 
-    // Debug logging
-    if time.elapsed_secs() % 1.0 < 0.1 {
-        info!(
-            "AI State: {:?}, Throttle: {:.2}, Steering: {:.2}, Brake: {}",
-            ai_driver.ai.state, control.throttle, control.steering, control.brake
-        );
+    // // Debug logging
+    #[cfg(debug_assertions)]
+    {
+        if time.elapsed_secs() % 1.0 < 0.1 {
+            info!(
+                "AI State: {:?}, Throttle: {:.2}, Steering: {:.2}, Brake: {}",
+                ai_driver.ai.state, control.throttle, control.steering, control.brake
+            );
+        }
     }
 }
 
@@ -1038,6 +1042,7 @@ fn toggle_ai_system(ai_query: Single<&mut AiDriver, With<PlayerCar>>) {
     let mut ai = ai_query.into_inner();
     ai.enabled = !ai.enabled;
 
+    #[cfg(debug_assertions)]
     if ai.enabled {
         info!("AI Parking: ENABLED");
     } else {
