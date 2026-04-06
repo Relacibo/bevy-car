@@ -62,6 +62,9 @@ pub struct ParkingAI {
     stuck_timer: f32,
     last_position: [f32; 3],
     obstacle_memory: ObstacleMemory,
+    backward_distance_traveled: f32,
+    backward_start_position: Option<[f32; 3]>,
+    min_backward_distance: f32,
 }
 
 #[derive(Default, Debug, Clone, Copy)]
@@ -82,6 +85,9 @@ impl Default for ParkingAI {
             stuck_timer: 0.0,
             last_position: [0.0, 0.0, 0.0],
             obstacle_memory: ObstacleMemory::default(),
+            backward_distance_traveled: 0.0,
+            backward_start_position: None,
+            min_backward_distance: 3.0, // Minimum 3 Meter rückwärts
         }
     }
 }
@@ -178,7 +184,7 @@ impl ParkingAI {
         }
     }
 
-    fn get_current_control(&self, car: CarState, target: TargetState, sensors: SensorReadings) -> CarControl {
+    fn get_current_control(&mut self, car: CarState, target: TargetState, sensors: SensorReadings) -> CarControl {
         match self.state {
             ParkingState::Parked => CarControl {
                 throttle: 0.0,
@@ -210,7 +216,7 @@ impl ParkingAI {
         }
     }
 
-    fn navigate_to_target(&self, car: CarState, target: TargetState, sensors: SensorReadings) -> CarControl {
+    fn navigate_to_target(&mut self, car: CarState, target: TargetState, sensors: SensorReadings) -> CarControl {
         let to_target = [
             target.position[0] - car.position[0],
             0.0,
@@ -238,6 +244,26 @@ impl ParkingAI {
         // Determine if we should go forward or backward
         let should_reverse = dot < -0.3;
 
+        // Track backward distance
+        if should_reverse {
+            if self.backward_start_position.is_none() {
+                self.backward_start_position = Some(car.position);
+                self.backward_distance_traveled = 0.0;
+            } else if let Some(start_pos) = self.backward_start_position {
+                self.backward_distance_traveled = (
+                    (car.position[0] - start_pos[0]).powi(2) +
+                    (car.position[2] - start_pos[2]).powi(2)
+                ).sqrt();
+            }
+        } else {
+            self.backward_start_position = None;
+            self.backward_distance_traveled = 0.0;
+        }
+
+        // If reversing and haven't reached minimum distance, keep going unless obstacle is very close
+        let must_continue_backward = should_reverse && 
+                                     self.backward_distance_traveled < self.min_backward_distance;
+
         // Dynamic throttle based on distance and obstacles
         let base_throttle = if should_reverse { -0.7 } else { 0.5 };
         
@@ -248,12 +274,21 @@ impl ParkingAI {
         };
 
         let distance_factor = (distance / 5.0).min(1.0);
-        let safety_factor = ((obstacle_distance - 1.0) / 3.0).clamp(0.2, 1.0);
+        let safety_factor = if must_continue_backward {
+            // Only slow down for very close obstacles when we must continue
+            ((obstacle_distance - 0.5) / 2.0).clamp(0.3, 1.0)
+        } else {
+            ((obstacle_distance - 1.0) / 3.0).clamp(0.2, 1.0)
+        };
         
         let throttle = base_throttle * distance_factor * safety_factor;
 
-        // Emergency brake
-        let brake = obstacle_distance < 0.8;
+        // Emergency brake - but not if we must continue backward and there's still some space
+        let brake = if must_continue_backward {
+            obstacle_distance < 0.5
+        } else {
+            obstacle_distance < 0.8
+        };
 
         CarControl {
             throttle: if brake { 0.0 } else { throttle },

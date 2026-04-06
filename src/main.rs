@@ -7,7 +7,19 @@ mod parking_ai;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Bevy Car - Parking Game".to_owned(),
+                        #[cfg(target_family = "wasm")]
+                        canvas: Some("#bevy-canvas".into()),
+                        ..default()
+                    }),
+                    ..default()
+                })
+                .set(ImagePlugin::default_nearest()),
+        )
         .add_plugins(RapierPhysicsPlugin::<NoUserData>::default())
         .add_plugins(RapierDebugRenderPlugin::default())
         .insert_resource(DebugTimer(Timer::from_seconds(1.0, TimerMode::Repeating)))
@@ -818,15 +830,16 @@ fn update_sensors(
         let sensor_pos = global_transform.translation();
 
         // Richtung abhängig von der Sensor-Position bestimmen
+        // FrontLeft/Right: 60° nach vorne (tan(60°) ≈ 1.732, also forward * 1.732 + side)
         let sensor_dir = match sensor.position {
             DistanceSensorPosition::Front => car_forward_xz,
             DistanceSensorPosition::Back => -car_forward_xz,
             DistanceSensorPosition::Left => -car_right_xz,
             DistanceSensorPosition::Right => car_right_xz,
-            DistanceSensorPosition::FrontLeft => (car_forward_xz - car_right_xz).normalize(),
-            DistanceSensorPosition::FrontRight => (car_forward_xz + car_right_xz).normalize(),
-            DistanceSensorPosition::BackLeft => (-car_forward_xz - car_right_xz).normalize(),
-            DistanceSensorPosition::BackRight => (-car_forward_xz + car_right_xz).normalize(),
+            DistanceSensorPosition::FrontLeft => (car_forward_xz * 1.732 - car_right_xz).normalize(),
+            DistanceSensorPosition::FrontRight => (car_forward_xz * 1.732 + car_right_xz).normalize(),
+            DistanceSensorPosition::BackLeft => (-car_forward_xz * 1.732 - car_right_xz).normalize(),
+            DistanceSensorPosition::BackRight => (-car_forward_xz * 1.732 + car_right_xz).normalize(),
         };
 
         // Raycast mit Ausschluss des eigenen Autos
@@ -1047,15 +1060,16 @@ fn draw_sensor_gizmos(
         let start_pos = global_transform.translation();
 
         // Gleiche Richtungslogik wie in `update_sensors`
+        // FrontLeft/Right: 60° nach vorne
         let direction = match sensor.position {
             DistanceSensorPosition::Front => car_forward_xz,
             DistanceSensorPosition::Back => -car_forward_xz,
             DistanceSensorPosition::Left => -car_right_xz,
             DistanceSensorPosition::Right => car_right_xz,
-            DistanceSensorPosition::FrontLeft => (car_forward_xz - car_right_xz).normalize(),
-            DistanceSensorPosition::FrontRight => (car_forward_xz + car_right_xz).normalize(),
-            DistanceSensorPosition::BackLeft => (-car_forward_xz - car_right_xz).normalize(),
-            DistanceSensorPosition::BackRight => (-car_forward_xz + car_right_xz).normalize(),
+            DistanceSensorPosition::FrontLeft => (car_forward_xz * 1.732 - car_right_xz).normalize(),
+            DistanceSensorPosition::FrontRight => (car_forward_xz * 1.732 + car_right_xz).normalize(),
+            DistanceSensorPosition::BackLeft => (-car_forward_xz * 1.732 - car_right_xz).normalize(),
+            DistanceSensorPosition::BackRight => (-car_forward_xz * 1.732 + car_right_xz).normalize(),
         };
 
         // Bestimme Farbe basierend auf Distanz
