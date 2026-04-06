@@ -12,11 +12,11 @@ serde_json = "1.0"
 runner = "wasm-server-runner"
 
 [profile.release]
-lto = "fat"
+lto = true
 codegen-units = 1
 opt-level = 'z'
 panic = "abort"
-strip = "symbols"
+strip = true
 
 [profile.dev.package."*"]
 opt-level = 3
