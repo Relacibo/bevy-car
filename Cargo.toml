@@ -1,10 +1,24 @@
 [package]
 name = "bevy-car"
-version = "0.1.0"
+version = "0.1.1"
 edition = "2024"
 
+[features]
+default = ["bevy/3d"]
+web = ["bevy/webgl2"]
+
 [dependencies]
-bevy = { version = "0.18", default-features = false, features = ["3d"] }
+bevy = { version = "0.18", default-features = false, features = [
+  "3d_bevy_render",
+  "default_app",
+  "scene",
+  "ui",
+  "bevy_gilrs",
+  "bevy_winit",
+  "default_font",
+  "multi_threaded",
+  "std",
+] }
 bevy_rapier3d = { version = "0.33.0" }
 serde_json = "1.0"
 
