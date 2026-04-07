@@ -30,9 +30,6 @@ jobs:
       - name: Setup wasm-bindgen CLI
         uses: jetli/wasm-bindgen-action@v0.2.0
 
-      - name: Cache Rust dependencies
-        uses: Swatinem/rust-cache@v2
-
       - name: Build WASM
         run: ./scripts/build-wasm.sh
 
