@@ -7,6 +7,9 @@ mkdir -p dist
 echo "Copying static files..."
 cp -r public/* dist/ 2>/dev/null || true
 
+echo "Copying assets..."
+cp -r assets dist/ 2>/dev/null || true
+
 export PACKAGE_NAME=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].name')
 
 JOBS_FLAG=""

@@ -540,12 +540,16 @@ fn setup_debug_ui(mut commands: Commands) {
         });
 }
 
-fn toggle_debug_ui(debug_ui: Single<&mut Visibility, With<DebugUI>>) {
+fn toggle_debug_ui(
+    debug_ui: Single<&mut Visibility, With<DebugUI>>,
+    mut debug_render_ctx: ResMut<DebugRenderContext>,
+) {
     let mut visibility = debug_ui.into_inner();
     *visibility = match *visibility {
         Visibility::Hidden => Visibility::Visible,
         _ => Visibility::Hidden,
     };
+    debug_render_ctx.enabled = matches!(*visibility, Visibility::Visible);
 }
 fn should_display_debug_ui(debug_ui: Single<&Visibility, With<DebugUI>>) -> bool {
     matches!(*debug_ui.into_inner(), Visibility::Visible)
