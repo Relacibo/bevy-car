@@ -354,7 +354,7 @@ dependencies = [
 
 [[package]]
 name = "bevy-car"
-version = "0.1.10"
+version = "0.1.11"
 dependencies = [
  "bevy",
  "bevy_rapier3d",
