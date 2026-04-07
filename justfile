@@ -7,7 +7,7 @@ current-version:
 # Increment patch version (e.g., 0.1.0 -> 0.1.1)
 _increment-patch:
     #!/usr/bin/env bash
-    current=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+    current=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
     IFS='.' read -ra VERSION <<< "$current"
     major="${VERSION[0]}"
     minor="${VERSION[1]}"
@@ -45,12 +45,12 @@ release version="":
 
 # Create release and push tag and changes to remote
 release-push version="":
-    just release {{version}}
     #!/usr/bin/env bash
+    just release {{version}}
     set -euo pipefail
     
     # Get current version from Cargo.toml
-    current=$(grep '^version = ' Cargo.toml | head -1 | sed 's/version = "\(.*\)"/\1/')
+    current=$(cargo metadata --no-deps --format-version 1 | jq -r '.packages[0].version')
     tag_version="v$current"
     
     # Get current branch
