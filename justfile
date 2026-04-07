@@ -42,7 +42,6 @@ release version="":
     git tag -a "v$new_version" -m "Release version $new_version"
     
     echo "✅ Created release v$new_version"
-    echo "Run 'just release-push' to push to remote"
 
 # Create release and push tag and changes to remote
 release-push version="":
