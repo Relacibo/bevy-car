@@ -5,7 +5,11 @@ edition = "2024"
 
 [features]
 default = ["bevy/3d"]
-github_cicd_web = ["bevy/webgl2", "bevy/libm"]
+github_cicd_web = [
+  "bevy/webgl2",
+  "bevy/libm",
+  "bevy_rapier3d/enhanced-determinism",
+]
 
 [dependencies]
 bevy = { version = "0.18", default-features = false, features = [
