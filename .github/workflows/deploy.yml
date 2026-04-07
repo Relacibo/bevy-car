@@ -36,8 +36,7 @@ jobs:
       - name: Build WASM
         run: ./scripts/build-wasm.sh
         env:
-          CARGO_JOBS: 1
-          RUSTFLAGS: "-C link-arg=--strip-all -C link-arg=--max-memory=4294967296"
+          CARGO_FEATURES: "github_cicd_web"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

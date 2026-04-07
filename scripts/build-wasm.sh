@@ -15,13 +15,19 @@ if [ -n "$CARGO_JOBS" ]; then
     echo "Using $CARGO_JOBS parallel jobs for build..."
 fi
 
+FEATURES_FLAG=""
+if [ -n "$CARGO_FEATURES" ]; then
+    FEATURES_FLAG="--features=$CARGO_FEATURES"
+    echo "Features: $FEATURES_FLAG"
+fi
+
 echo "Building WASM target for $PACKAGE_NAME..."
 cargo build \
   $JOBS_FLAG \
+  $FEATURES_FLAG \
   --release \
   --target wasm32-unknown-unknown \
-  --no-default-features \
-  --features web
+  --no-default-features
 
 echo "Running wasm-bindgen..."
 wasm-bindgen \

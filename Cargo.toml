@@ -5,7 +5,7 @@ edition = "2024"
 
 [features]
 default = ["bevy/3d"]
-web = ["bevy/webgl2"]
+github_cicd_web = ["bevy/webgl2", "libm"]
 
 [dependencies]
 bevy = { version = "0.18", default-features = false, features = [
