@@ -35,8 +35,6 @@ jobs:
 
       - name: Build WASM
         run: ./scripts/build-wasm.sh
-        env:
-          CARGO_FEATURES: "github_cicd_web"
 
       - name: Setup Pages
         uses: actions/configure-pages@v5

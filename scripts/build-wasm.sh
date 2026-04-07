@@ -17,7 +17,7 @@ fi
 
 FEATURES_FLAG=""
 if [ -n "$CARGO_FEATURES" ]; then
-    FEATURES_FLAG="--features=$CARGO_FEATURES"
+    FEATURES_FLAG="--no-default-features --features=$CARGO_FEATURES"
     echo "Features: $FEATURES_FLAG"
 fi
 
@@ -26,8 +26,7 @@ cargo build \
   $JOBS_FLAG \
   $FEATURES_FLAG \
   --release \
-  --target wasm32-unknown-unknown \
-  --no-default-features
+  --target wasm32-unknown-unknown
 
 echo "Running wasm-bindgen..."
 wasm-bindgen \
